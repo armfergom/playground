@@ -16,11 +16,7 @@ Table of Contents
   - [generic:winnings](#genericwinnings)
 - [Custom Types](#custom-types)
   - [CascadeState](#cascadestate)
-  - [FreeSpinState](#freespinstate)
   - [MainState](#mainstate)
-  - [PickAwardWrapper](#pickawardwrapper)
-  - [PickerState](#pickerstate)
-  - [PickAward](#pickaward)
 
 
 Game Actions
@@ -68,7 +64,7 @@ Message sent to the client after every action indicating what actions are allowe
 #### Example
 
 ```
-{"availableActions":["generic:spin"],"state":"MAIN","type":"game-event","name":"generic:availableActions"}
+{"availableActions":["generic:spin"],"state":"MAIN_CASCADES","type":"game-event","name":"generic:availableActions"}
 ```
 
 generic:cascadesEnd
@@ -87,7 +83,7 @@ Message sent to the client indicating that cascades have just ended.
 #### Example
 
 ```
-{"stateName":"MAIN_CASCADES","context":{"bet":100,"panel":{"reels":[{"symbols":["ROCKET"]},{"symbols":["NITRO"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]}]},"winnings":[],"cascadeLevel":1,"multiplier":1},"type":"game-event","name":"generic:cascadesEnd"}
+{"stateName":"MAIN_CASCADES","context":{"bet":100,"panel":{"reels":[{"symbols":["NITRO"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]},{"symbols":["NITRO"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]}]},"winnings":[],"cascadeLevel":2,"multiplier":2},"type":"game-event","name":"generic:cascadesEnd"}
 ```
 
 generic:cascadesProgress
@@ -106,7 +102,7 @@ Message sent to the client indicating the progress of the cascades phase. Sent a
 #### Example
 
 ```
-{"stateName":"MAIN","context":{"bet":100,"panel":{"reels":[{"symbols":["ROCKET"]},{"symbols":["NITRO"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]}]},"winnings":[],"cascadeLevel":1,"multiplier":1},"type":"game-event","name":"generic:cascadesProgress"}
+{"stateName":"MAIN_CASCADES","context":{"bet":100,"panel":{"reels":[{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["NITRO"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]}]},"winnings":[{"winningType":"LINE","prizeType":"MONEY","winnings":50,"mainSymbol":"ROCKET","occurrences":3,"id":"1-0-2","symbols":["ROCKET","ROCKET","ROCKET"],"coords":[{"reel":0,"row":0},{"reel":1,"row":0},{"reel":2,"row":0}]}],"cascadeLevel":1,"multiplier":1},"type":"game-event","name":"generic:cascadesProgress"}
 ```
 
 generic:cascadesStart
@@ -125,7 +121,7 @@ Message sent to the client indicating that cascades have just started.
 #### Example
 
 ```
-{"stateName":"MAIN_CASCADES","context":{"bet":100,"panel":{"reels":[{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]}]},"winnings":[],"cascadeLevel":0,"multiplier":1},"type":"game-event","name":"generic:cascadesStart"}
+{"stateName":"MAIN_CASCADES","context":{"bet":100,"panel":{"reels":[{"symbols":["WILD_M3"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]}]},"winnings":[],"cascadeLevel":0,"multiplier":1},"type":"game-event","name":"generic:cascadesStart"}
 ```
 
 generic:configuration
@@ -202,7 +198,7 @@ Message sent to the client after every spin action with the result of the spin.
 #### Example
 
 ```
-{"betAmount":100,"panel":{"reels":[{"symbols":["GEAR"]},{"symbols":["NITRO"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]}]},"basePanel":{"reels":[{"symbols":["GEAR"]},{"symbols":["NITRO"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]}]},"type":"game-event","name":"generic:spin"}
+{"betAmount":100,"panel":{"reels":[{"symbols":["WILD_M3"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]}]},"basePanel":{"reels":[{"symbols":["WILD_M3"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]}]},"type":"game-event","name":"generic:spin"}
 ```
 
 generic:symbolMovement
@@ -223,7 +219,7 @@ Message sent to the client indicating that certain symbols have been moved from 
 #### Example
 
 ```
-{"originalPanel":{"reels":[{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]}]},"newPanel":{"reels":[{"symbols":["ROCKET"]},{"symbols":["NITRO"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]}]},"transitions":[{"from":null,"to":{"reel":0,"row":0}},{"from":null,"to":{"reel":1,"row":0}},{"from":null,"to":{"reel":2,"row":0}}],"componentName":"AvalancheReelsModifier","type":"game-event","name":"generic:symbolMovement"}
+{"originalPanel":{"reels":[{"symbols":["WILD_M3"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]}]},"newPanel":{"reels":[{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["NITRO"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]}]},"transitions":[{"from":null,"to":{"reel":0,"row":0}},{"from":null,"to":{"reel":1,"row":0}},{"from":null,"to":{"reel":2,"row":0}},{"from":null,"to":{"reel":3,"row":0}}],"componentName":"AvalancheReelsModifier","type":"game-event","name":"generic:symbolMovement"}
 ```
 
 generic:winnings
@@ -242,7 +238,7 @@ Message sent to the client when winnings have been produced.
 #### Example
 
 ```
-{"winnings":[{"winningType":"LINE","prizeType":"MONEY","winnings":50,"mainSymbol":"ROCKET","occurrences":3,"id":"1-0-2","symbols":["ROCKET","ROCKET","ROCKET"],"coords":[{"reel":0,"row":0},{"reel":1,"row":0},{"reel":2,"row":0}]}],"monetaryWinningsSum":50,"type":"game-event","name":"generic:winnings"}
+{"winnings":[{"winningType":"LINE","prizeType":"MONEY","winnings":400,"mainSymbol":"ROCKET","occurrences":4,"id":"1-0-3","symbols":["WILD_M3","ROCKET","ROCKET","ROCKET"],"coords":[{"reel":0,"row":0},{"reel":1,"row":0},{"reel":2,"row":0},{"reel":3,"row":0}]}],"monetaryWinningsSum":400,"type":"game-event","name":"generic:winnings"}
 ```
 
 Custom Types
@@ -265,22 +261,6 @@ The last state of the game in a given cascade state.
 | cascadeLevel | `int`           | The current cascade level in a given cascade game       |
 | multiplier   | `long`          | The last prize multiplier used in the cascade game.     |
 
-FreeSpinState
--------------
-
-The last state of the game in a given free spin state.
-
-### Fields
-
-| Name                         | Type                             | Description                                                                      |
-| ---------------------------- | -------------------------------- | -------------------------------------------------------------------------------- |
-| bet                          | `long`                           | The last bet amount used in the free spin game.                                  |
-| panel                        | `Panel`                          | The last panel shown in the free spin game.                                      |
-| winnings                     | `List<Winning>`                  | The list of last winnings produced in the free spin game.                        |
-| multiplier                   | `long`                           | The last prize multiplier used in the free spin game.                            |
-| freeSpinRemaining            | `int`                            | The number of free spins to complete the free spin game.                         |
-| symbolsInPanelsStopCondition | `List<Pair<Set<Symbol>, Coord>>` | The symbols to appear in given coordinates so that the free spin game completes. |
-
 MainState
 ---------
 
@@ -294,49 +274,3 @@ The last state of the game in the MAIN state.
 | panel      | `Panel`         | The last panel shown in the MAIN game.               |
 | winnings   | `List<Winning>` | The list of last winnings produced in the MAIN game. |
 | multiplier | `long`          | The last prize multiplier used in the MAIN game.     |
-
-PickAwardWrapper
-----------------
-
-Represents a pickable item and whether it has been picked or not.
-
-### Fields
-
-| Name   | Type        | Description                                                   |
-| ------ | ----------- | ------------------------------------------------------------- |
-| award  | `PickAward` | The actual picked element with its information.               |
-| picked | `boolean`   | A boolean stating whether the element has been picked or not. |
-| level  | `int`       | The level in which this element is.                           |
-| index  | `int`       | The index inside the level in which this element is.          |
-
-PickerState
------------
-
-The last state of the game in a picker state.
-
-### Fields
-
-| Name                       | Type                                                           | Description                                                                                         |
-| -------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| bet                        | `long`                                                         | The bet amount with which the picker game was reached.                                              |
-| currentLevel               | `int`                                                          | If the picker game has levels, the current level of the picker game.                                |
-| items                      | `List<List<PickAwardWrapper>>`                                 | The list of items picked in each level of a picker game.                                            |
-| accumulatedTotalWinnings   | `long`                                                         | The accumulated monetary winnings at a given point of the picker game.                              |
-| unusedLevelEffectsPerLevel | `List<MutableMap<LevelEffect, MutableList<PickAwardWrapper>>>` | The list of level effects that have been picked per level that have not yet been used for anything. |
-| picksPerformed             | `int`                                                          | The total number of picks performed in a picker game.                                               |
-| picksRemaining             | `int`                                                          | The number of remaining picks to perform to complete a picker game.                                 |
-
-PickAward
----------
-
-Represents the configuration for a given item in a picker game.
-
-### Fields
-
-| Name              | Type                | Description                                                                    |
-| ----------------- | ------------------- | ------------------------------------------------------------------------------ |
-| name              | `String`            | The name of the item.                                                          |
-| aggregationEffect | `AggregationEffect` | The aggregation effect the item may have. NONE, WIN_ALL or WIN_ALL_IN_LEVEL    |
-| levelEffect       | `LevelEffect`       | THe leveling up or down effect the item may have. NONE, LEVEL_UP or LEVEL_DOWN |
-| awardType         | `PickAwardType`     | The type of award. MONEY or MULTIPLIER.                                        |
-| awardValue        | `long`              | The award value associated to the above awardType.                             |
