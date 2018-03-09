@@ -16,7 +16,13 @@ Table of Contents
   - [generic:winnings](#genericwinnings)
 - [Custom Types](#custom-types)
   - [CascadeState](#cascadestate)
+  - [FreeSpinState](#freespinstate)
   - [MainState](#mainstate)
+  - [PickerState](#pickerstate)
+  - [Coord](#coord)
+  - [Panel](#panel)
+  - [Winning](#winning)
+  - [Transition](#transition)
 
 
 Game Actions
@@ -56,10 +62,10 @@ Message sent to the client after every action indicating what actions are allowe
 
 ### Fields
 
-| Name             | Type               | Description                                       |
-| ---------------- | ------------------ | ------------------------------------------------- |
-| availableActions | `List<ActionName>` | The list of available actions for the next round. |
-| state            | `String`           | The name of the current state.                    |
+| Name             | Type           | Description                                       |
+| ---------------- | -------------- | ------------------------------------------------- |
+| availableActions | `List<String>` | The list of available actions for the next round. |
+| state            | `String`       | The name of the current state.                    |
 
 #### Example
 
@@ -83,7 +89,7 @@ Message sent to the client indicating that cascades have just ended.
 #### Example
 
 ```
-{"stateName":"MAIN_CASCADES","context":{"bet":100,"panel":{"reels":[{"symbols":["NITRO"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]},{"symbols":["NITRO"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]}]},"winnings":[],"cascadeLevel":2,"multiplier":2},"type":"game-event","name":"generic:cascadesEnd"}
+{"stateName":"MAIN_CASCADES","context":{"bet":100,"panel":{"reels":[{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["NITRO"]},{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]}]},"winnings":[],"cascadeLevel":1,"multiplier":1},"type":"game-event","name":"generic:cascadesEnd"}
 ```
 
 generic:cascadesProgress
@@ -102,7 +108,7 @@ Message sent to the client indicating the progress of the cascades phase. Sent a
 #### Example
 
 ```
-{"stateName":"MAIN_CASCADES","context":{"bet":100,"panel":{"reels":[{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["NITRO"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]}]},"winnings":[{"winningType":"LINE","prizeType":"MONEY","winnings":50,"mainSymbol":"ROCKET","occurrences":3,"id":"1-0-2","symbols":["ROCKET","ROCKET","ROCKET"],"coords":[{"reel":0,"row":0},{"reel":1,"row":0},{"reel":2,"row":0}]}],"cascadeLevel":1,"multiplier":1},"type":"game-event","name":"generic:cascadesProgress"}
+{"stateName":"MAIN","context":{"bet":100,"panel":{"reels":[{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["NITRO"]},{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]}]},"winnings":[],"cascadeLevel":1,"multiplier":1},"type":"game-event","name":"generic:cascadesProgress"}
 ```
 
 generic:cascadesStart
@@ -121,7 +127,7 @@ Message sent to the client indicating that cascades have just started.
 #### Example
 
 ```
-{"stateName":"MAIN_CASCADES","context":{"bet":100,"panel":{"reels":[{"symbols":["WILD_M3"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]}]},"winnings":[],"cascadeLevel":0,"multiplier":1},"type":"game-event","name":"generic:cascadesStart"}
+{"stateName":"MAIN_CASCADES","context":{"bet":100,"panel":{"reels":[{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]}]},"winnings":[],"cascadeLevel":0,"multiplier":1},"type":"game-event","name":"generic:cascadesStart"}
 ```
 
 generic:configuration
@@ -137,8 +143,8 @@ Message sent to the client in every connection with relevant engine configuratio
 | ----------------- | ------------------- | ------------------------------------------------------ |
 | minBet            | `long`              | The minimum bet allowed in the game.                   |
 | maxBet            | `long`              | The maximum bet allowed in the game.                   |
-| symbols           | `Set<Symbol>`       | The set of available symbols in the game.              |
-| symbolMultipliers | `Map<Symbol, Long>` | A prize multiplier associated with each symbol if any. |
+| symbols           | `Set<String>`       | The set of available symbols in the game.              |
+| symbolMultipliers | `Map<String, Long>` | A prize multiplier associated with each symbol if any. |
 
 generic:featureTriggeredWinnings
 --------------------------------
@@ -198,7 +204,7 @@ Message sent to the client after every spin action with the result of the spin.
 #### Example
 
 ```
-{"betAmount":100,"panel":{"reels":[{"symbols":["WILD_M3"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]}]},"basePanel":{"reels":[{"symbols":["WILD_M3"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]}]},"type":"game-event","name":"generic:spin"}
+{"betAmount":100,"panel":{"reels":[{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]}]},"basePanel":{"reels":[{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]}]},"type":"game-event","name":"generic:spin"}
 ```
 
 generic:symbolMovement
@@ -219,7 +225,7 @@ Message sent to the client indicating that certain symbols have been moved from 
 #### Example
 
 ```
-{"originalPanel":{"reels":[{"symbols":["WILD_M3"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]}]},"newPanel":{"reels":[{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]},{"symbols":["NITRO"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]}]},"transitions":[{"from":null,"to":{"reel":0,"row":0}},{"from":null,"to":{"reel":1,"row":0}},{"from":null,"to":{"reel":2,"row":0}},{"from":null,"to":{"reel":3,"row":0}}],"componentName":"AvalancheReelsModifier","type":"game-event","name":"generic:symbolMovement"}
+{"originalPanel":{"reels":[{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]}]},"newPanel":{"reels":[{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["NITRO"]},{"symbols":["GEAR"]},{"symbols":["ROCKET"]},{"symbols":["ROCKET"]}]},"transitions":[{"from":null,"to":{"reel":0,"row":0}},{"from":null,"to":{"reel":1,"row":0}},{"from":null,"to":{"reel":2,"row":0}},{"from":null,"to":{"reel":3,"row":0}}],"componentName":"AvalancheReelsModifier","type":"game-event","name":"generic:symbolMovement"}
 ```
 
 generic:winnings
@@ -238,7 +244,7 @@ Message sent to the client when winnings have been produced.
 #### Example
 
 ```
-{"winnings":[{"winningType":"LINE","prizeType":"MONEY","winnings":400,"mainSymbol":"ROCKET","occurrences":4,"id":"1-0-3","symbols":["WILD_M3","ROCKET","ROCKET","ROCKET"],"coords":[{"reel":0,"row":0},{"reel":1,"row":0},{"reel":2,"row":0},{"reel":3,"row":0}]}],"monetaryWinningsSum":400,"type":"game-event","name":"generic:winnings"}
+{"winnings":[{"winningType":"LINE","prizeType":"MONEY","winnings":100,"mainSymbol":"GEAR","occurrences":4,"id":"1-0-3","symbols":["GEAR","GEAR","GEAR","GEAR"],"coords":[{"reel":0,"row":0},{"reel":1,"row":0},{"reel":2,"row":0},{"reel":3,"row":0}]}],"monetaryWinningsSum":100,"type":"game-event","name":"generic:winnings"}
 ```
 
 Custom Types
@@ -261,6 +267,22 @@ The last state of the game in a given cascade state.
 | cascadeLevel | `int`           | The current cascade level in a given cascade game       |
 | multiplier   | `long`          | The last prize multiplier used in the cascade game.     |
 
+FreeSpinState
+-------------
+
+The last state of the game in a given free spin state.
+
+### Fields
+
+| Name                         | Type                             | Description                                                                      |
+| ---------------------------- | -------------------------------- | -------------------------------------------------------------------------------- |
+| bet                          | `long`                           | The last bet amount used in the free spin game.                                  |
+| panel                        | `Panel`                          | The last panel shown in the free spin game.                                      |
+| winnings                     | `List<Winning>`                  | The list of last winnings produced in the free spin game.                        |
+| multiplier                   | `long`                           | The last prize multiplier used in the free spin game.                            |
+| freeSpinRemaining            | `int`                            | The number of free spins to complete the free spin game.                         |
+| symbolsInPanelsStopCondition | `List<Pair<Set<String>, Coord>>` | The symbols to appear in given coordinates so that the free spin game completes. |
+
 MainState
 ---------
 
@@ -274,3 +296,73 @@ The last state of the game in the MAIN state.
 | panel      | `Panel`         | The last panel shown in the MAIN game.               |
 | winnings   | `List<Winning>` | The list of last winnings produced in the MAIN game. |
 | multiplier | `long`          | The last prize multiplier used in the MAIN game.     |
+
+PickerState
+-----------
+
+The last state of the game in a picker state.
+
+### Fields
+
+| Name                       | Type                                             | Description                                                                                         |
+| -------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| bet                        | `long`                                           | The bet amount with which the picker game was reached.                                              |
+| currentLevel               | `int`                                            | If the picker game has levels, the current level of the picker game.                                |
+| items                      | `List<List<PickAwardWrapper>>`                   | The list of items picked in each level of a picker game.                                            |
+| accumulatedTotalWinnings   | `long`                                           | The accumulated monetary winnings at a given point of the picker game.                              |
+| unusedLevelEffectsPerLevel | `List<Map<LevelEffect, List<PickAwardWrapper>>>` | The list of level effects that have been picked per level that have not yet been used for anything. |
+| picksPerformed             | `int`                                            | The total number of picks performed in a picker game.                                               |
+| picksRemaining             | `int`                                            | The number of remaining picks to perform to complete a picker game.                                 |
+
+Coord
+-----
+
+The representation of a panel coordinate.
+
+### Fields
+
+| Name | Type  | Description                       |
+| ---- | ----- | --------------------------------- |
+| reel | `int` | The reel index of the coordinate. |
+| row  | `int` | The row index of the coordinate.  |
+
+Panel
+-----
+
+A representation of a panel in a slot game.
+
+### Fields
+
+| Name  | Type         | Description                               |
+| ----- | ------------ | ----------------------------------------- |
+| reels | `List<Reel>` | The list of reels a panel is composed of. |
+
+Winning
+-------
+
+Represents a winning after a panel evaluation. Winnings do not necessarily need to be monetary.
+
+### Fields
+
+| Name        | Type           | Description                                                                                                     |
+| ----------- | -------------- | --------------------------------------------------------------------------------------------------------------- |
+| winningType | `WinningType`  | The type of winning. LINE, SCATTER, WAY, PICKER, GROUP.                                                         |
+| prizeType   | `PrizeType`    | The type of prize awarded. MONEY, FEATURE_START, ITEM_COLLECTED, MISC.                                          |
+| winnings    | `long`         | If the winning is monetary, this indicates the actual amount.                                                   |
+| mainSymbol  | `String`       | The main symbol that produced the winning.                                                                      |
+| occurrences | `int`          | The number of occurrences of the symbol that produced the winning.                                              |
+| id          | `String`       | An identifier for the winning.                                                                                  |
+| symbols     | `List<String>` | The actual list of symbols that produced the winning. May all be the same or itcould also include wild symbols. |
+| coords      | `List<Coord>`  | The coordinates where the symbols that produced the winnings are in the evaluated panel.                        |
+
+Transition
+----------
+
+Represents the a symbol movement in a panel.
+
+### Fields
+
+| Name | Type    | Description                                                                                          |
+| ---- | ------- | ---------------------------------------------------------------------------------------------------- |
+| from | `Coord` | The position from which the symbol is going to move. Null if the symbol comesfrom outside the panel. |
+| to   | `Coord` | The position where the symbol will be moved to.                                                      |
