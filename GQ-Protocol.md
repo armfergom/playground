@@ -21,11 +21,11 @@ Table of Contents
   - [CascadeState](#cascadestate)
   - [FreeSpinState](#freespinstate)
   - [MainState](#mainstate)
-  - [PickerState](#pickerstate)
   - [Coord](#coord)
   - [Panel](#panel)
   - [Winning](#winning)
   - [Transition](#transition)
+- [Event Sequences](#event-sequences)
 
 
 Game Actions
